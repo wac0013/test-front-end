@@ -1,16 +1,17 @@
 <template>
     <div id="main" class="d-flex justify-center align-center">
-        <v-file-input 
-            outlined 
-            dense 
-            small-chips 
-            multiple 
-            :loading="processing" 
-            label="Arquivos de configuração" 
-            accept=".json" 
-            v-model="files"
-            @change="loadFile()">
-        </v-file-input>
+        
+            <v-file-input 
+                outlined 
+                dense 
+                small-chips 
+                multiple 
+                :loading="processing" 
+                label="informe os arquivos JSON com os dados para o teste" 
+                accept=".json" 
+                v-model="files"
+                @change="loadFile()">
+            </v-file-input>
     </div>
 </template>
 
@@ -24,23 +25,25 @@ export default class Home extends Vue {
     public processing: boolean = false;
     public files: File[] = [];
 
-    public loadFile() {
-        localStorage.clear();
-
-        files.saveFiles(this.files);
-
-        setInterval(() => {
+    public created() {
+        this.$on('loadData', () => {
             if (
-                files.getRelationships() &&
-                files.getTeachers() &&
-                files.getStudents() &&
-                files.getMatters() &&
-                files.getDegrees() &&
-                files.getClasses()
+                files.getRelationships().length &&
+                files.getTeachers().length &&
+                files.getStudents().length &&
+                files.getMatters().length &&
+                files.getDegrees().length &&
+                files.getClasses().length
             ) {
                 this.$router.push('/students');
             }
-        }, 2000);
+        });
+    }
+
+    public loadFile() {
+        localStorage.clear();
+
+        files.saveFiles(this.files, this);
     }
 }
 </script>

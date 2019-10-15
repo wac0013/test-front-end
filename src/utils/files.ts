@@ -5,6 +5,8 @@ import { Degree } from '@/models/degrees';
 import { Class } from '@/models/classes';
 import { Relationship } from '@/models/relationships';
 
+import Vue from 'vue';
+
 export enum Files {
     TEACHERS = 'teachers',
     STUDENTS = 'students',
@@ -18,7 +20,11 @@ export function getTeachers(): Teacher[] {
     let ret = localStorage.getItem(Files.TEACHERS);
     const resultado: Teacher[] = [];
 
-    ret = JSON.parse(ret ? ret : '');
+    if (!ret) {
+        return resultado;
+    }
+
+    ret = JSON.parse(ret);
 
     if (Array.isArray(ret)) {
         ret.forEach((e) => {
@@ -33,11 +39,15 @@ export function getStudents(): Student[] {
     let ret = localStorage.getItem(Files.STUDENTS);
     const resultado: Student[] = [];
 
-    ret = JSON.parse(ret ? ret : '');
+    if (!ret) {
+        return resultado;
+    }
+
+    ret = JSON.parse(ret);
 
     if (Array.isArray(ret)) {
         ret.forEach((e) => {
-            resultado.push(new Student(e.id, e.name, e.ra, e.degree, e.classe));
+            resultado.push(new Student(e.id, e.name, e.ra, e.degreeId, e.classId));
         });
     }
 
@@ -48,7 +58,11 @@ export function getMatters(): Matter[] {
     let ret = localStorage.getItem(Files.MATTERS);
     const resultado: Matter[] = [];
 
-    ret = JSON.parse(ret ? ret : '');
+    if (!ret) {
+        return resultado;
+    }
+
+    ret = JSON.parse(ret);
 
     if (Array.isArray(ret)) {
         ret.forEach((e) => {
@@ -63,7 +77,11 @@ export function getDegrees(): Degree[] {
     let ret = localStorage.getItem(Files.DEGREES);
     const resultado: Degree[] = [];
 
-    ret = JSON.parse(ret ? ret : '');
+    if (!ret) {
+        return resultado;
+    }
+
+    ret = JSON.parse(ret);
 
     if (Array.isArray(ret)) {
         ret.forEach((e) => {
@@ -78,10 +96,14 @@ export function getClasses(): Class[] {
     let ret: any = localStorage.getItem(Files.CLASSES);
     const resultado: Class[] = [];
 
-    ret = JSON.parse(ret ? ret : '');
+    if (!ret) {
+        return resultado;
+    }
+
+    ret = JSON.parse(ret);
 
     if (Array.isArray(ret.classes)) {
-        ret.forEach((e) => {
+        ret.classes.forEach((e) => {
             resultado.push(new Class(e.id, e.name));
         });
     }
@@ -93,7 +115,11 @@ export function getRelationships(): Relationship[] {
     let ret = localStorage.getItem(Files.RELATIONSHIPS);
     const resultado: Relationship[] = [];
 
-    ret = JSON.parse(ret ? ret : '');
+    if (!ret) {
+        return resultado;
+    }
+
+    ret = JSON.parse(ret);
 
     if (Array.isArray(ret)) {
         ret.forEach((e) => {
@@ -104,8 +130,31 @@ export function getRelationships(): Relationship[] {
     return resultado;
 }
 
+export function setClasses(v: any) {
+    localStorage.setItem(Files.CLASSES, JSON.stringify(v));
+}
 
-export function saveFiles(files: File[]) {
+export function setDegrees(v: any) {
+    localStorage.setItem(Files.DEGREES, JSON.stringify(v));
+}
+
+export function setMatters(v: any) {
+    localStorage.setItem(Files.MATTERS, JSON.stringify(v));
+}
+
+export function setRelationships(v: any) {
+    localStorage.setItem(Files.RELATIONSHIPS, JSON.stringify(v));
+}
+
+export function setStudents(v: any) {
+    localStorage.setItem(Files.STUDENTS, JSON.stringify(v));
+}
+
+export function setTeachers(v: any) {
+    localStorage.setItem(Files.TEACHERS, JSON.stringify(v));
+}
+
+export function saveFiles(files: File[], component: Vue) {
     files.forEach((file) => {
         const reader = new FileReader();
 
@@ -113,6 +162,7 @@ export function saveFiles(files: File[]) {
         reader.onload = (evt) => {
             if (evt && evt.target && typeof evt.target.result === 'string') {
                 localStorage.setItem(file.name.split('.')[0], evt.target.result);
+                component.$emit('loadData');
             }
         };
     });

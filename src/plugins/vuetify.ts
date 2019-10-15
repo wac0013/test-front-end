@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
 import pt from 'vuetify/src/locale/pt';
+import colors from 'vuetify/es5/util/colors';
+
 
 Vue.use(Vuetify);
 
@@ -12,13 +14,13 @@ export default new Vuetify({
       },
     themes: {
       light: {
-        primary: '#ee44aa',
-        secondary: '#424242',
-        accent: '#82B1FF',
-        error: '#FF5252',
-        info: '#2196F3',
-        success: '#4CAF50',
-        warning: '#FFC107',
+        primary: colors.indigo.base,
+        secondary: colors.lime.base,
+        accent: colors.teal.base,
+        error: colors.red.base,
+        warning: colors.amber.base,
+        info: colors.lightBlue.base,
+        success: colors.green.base,
       },
     },
   },

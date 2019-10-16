@@ -103,7 +103,7 @@ export function getClasses(): Class[] {
     ret = JSON.parse(ret);
 
     if (Array.isArray(ret.classes)) {
-        ret.classes.forEach((e) => {
+        ret.classes.forEach((e: any) => {
             resultado.push(new Class(e.id, e.name));
         });
     }
@@ -123,11 +123,23 @@ export function getRelationships(): Relationship[] {
 
     if (Array.isArray(ret)) {
         ret.forEach((e) => {
-            resultado.push(new Relationship(e.id, e.TeacherId, e.matterId, e.degrees));
+            resultado.push(new Relationship(e.id, e.teacherId, e.matterId, e.degrees));
         });
     }
 
     return resultado;
+}
+
+export function getClassById(id: number): Class | undefined {
+    return getClasses().find((v) => v.id === id);
+}
+
+export function getDegreeById(id: number): Degree | undefined {
+    return getDegrees().find((v) => v.id === id);
+}
+
+export function getTeacherById(id: number): Teacher | undefined {
+    return getTeachers().find((v) => v.id === id);
 }
 
 export function setClasses(v: any) {

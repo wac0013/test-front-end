@@ -1,3 +1,8 @@
+import { Teacher } from './teachers';
+import { getTeachers, getDegrees, getClasses } from '@/utils/files';
+import { Degree } from './degrees';
+import { Class } from './classes';
+
 export interface IClass {
     classPosition: number;
 }
